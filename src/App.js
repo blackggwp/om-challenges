@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 import fetch from 'isomorphic-fetch';
-
 import { summaryDonations } from './helpers';
-
-
-const Card = styled.div`
-  margin: 10px;
-  border: 1px solid #ccc;
-`;
+import CardPayment from './components/CardPayment';
+import CardList, { Wrapper } from './components/CardList';
 
 export default connect((state) => state)(
   class App extends Component {
@@ -25,13 +19,14 @@ export default connect((state) => state)(
     componentDidMount() {
       const self = this;
       fetch('http://localhost:3001/charities')
-        .then(function(resp) { return resp.json(); })
-        .then(function(data) {
-          self.setState({ charities: data }) });
+        .then(function (resp) { return resp.json(); })
+        .then(function (data) {
+          self.setState({ charities: data })
+        });
 
       fetch('http://localhost:3001/payments')
-        .then(function(resp) { return resp.json() })
-        .then(function(data) {
+        .then(function (resp) { return resp.json() })
+        .then(function (data) {
           self.props.dispatch({
             type: 'UPDATE_TOTAL_DONATE',
             amount: summaryDonations(data.map((item) => (item.amount))),
@@ -41,26 +36,7 @@ export default connect((state) => state)(
 
     render() {
       const self = this;
-      const cards = this.state.charities.map(function(item, i) {
-        const payments = [10, 20, 50, 100, 500].map((amount, j) => (
-          <label key={j}>
-            <input
-              type="radio"
-              name="payment"
-              onClick={function() {
-                self.setState({ selectedAmount: amount })
-              }} /> {amount}
-          </label>
-        ));
 
-        return (
-          <Card key={i}>
-            <p>{item.name}</p>
-            {payments}
-            <button onClick={handlePay.call(self, item.id, self.state.selectedAmount, item.currency)}>Pay</button>
-          </Card>
-        );
-      });
 
       const style = {
         color: 'red',
@@ -74,10 +50,13 @@ export default connect((state) => state)(
 
       return (
         <div>
-          <h1>Tamboon React</h1>
+          <h1 style={{ textAlign: 'center' }}>Tamboon React</h1>
           <p>All donations: {donate}</p>
           <p style={style}>{message}</p>
-          {cards}
+          <Wrapper>
+            <CardPayment />
+            <CardList charities={self.state.charities} />
+          </Wrapper>
         </div>
       );
     }
@@ -86,13 +65,13 @@ export default connect((state) => state)(
 
 function handlePay(id, amount, currency) {
   const self = this;
-  return function() {
+  return function () {
     fetch('http://localhost:3001/payments', {
       method: 'POST',
       body: `{ "charitiesId": ${id}, "amount": ${amount}, "currency": "${currency}" }`,
     })
-      .then(function(resp) { return resp.json(); })
-      .then(function() {
+      .then(function (resp) { return resp.json(); })
+      .then(function () {
         self.props.dispatch({
           type: 'UPDATE_TOTAL_DONATE',
           amount,
@@ -102,7 +81,7 @@ function handlePay(id, amount, currency) {
           message: `Thanks for donate ${amount}!`,
         });
 
-        setTimeout(function() {
+        setTimeout(function () {
           self.props.dispatch({
             type: 'UPDATE_MESSAGE',
             message: '',

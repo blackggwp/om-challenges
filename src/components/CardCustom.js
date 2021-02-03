@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import CardPayment from "./CardPayment";
 import { Card } from "./Card";
@@ -45,19 +45,6 @@ const CardButton = styled.button`
   }
 `;
 
-const style = {
-  root: {
-    minWidth: 275,
-    height: 300,
-    position: "relative",
-    background: "salmon"
-  },
-  active: {
-    opacity: 0.4,
-    zIndex: 2,
-  },
-}
-
 export default function CardCustom(props) {
   const [isShown, setIsShown] = useState(true);
 
@@ -80,7 +67,7 @@ export default function CardCustom(props) {
             <CardButton type="button">Donate</CardButton>
           </CardBody>
         </Card> :
-        <CardPayment setIsShown={setIsShown} />
+        <CardPayment paymentDetails={props.charities} setIsShown={setIsShown} />
       }
     </>
   );

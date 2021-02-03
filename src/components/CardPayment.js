@@ -9,14 +9,13 @@ const CardPaymentStyled = styled(Card)`
 `;
 
 const CloseBtn = styled.div`
-position: relative;
+float: right;
+padding: 5px;
 color: #777;
 font: 14px/100% arial,sans-serif;
-right: -170px;
 -webkit-text-decoration: none;
 text-decoration: none;
 text-shadow: 0 1px 0 #fff;
-top: 5px;
 cursor: pointer;
 `;
 
@@ -32,10 +31,13 @@ export default connect((state) => state)(function CardPayment(props) {
       {amount}
     </label>
   ));
-  const handlePay = (id, amount, currency) => {
+  const handlePay = ({ id, currency }, amount) => {
+    const postData = `{ "charitiesId": ${id}, "amount": ${amount}, "currency": "${currency}" }`
+    console.log(postData)
     fetch("http://localhost:3001/payments", {
-      method: "POST",
-      body: `{ "charitiesId": ${id}, "amount": ${amount}, "currency": "${currency}" }`,
+      method: 'POST',
+      body: postData,
+      headers: { "Content-Type": "application/json" },
     })
       .then(function (resp) {
         return resp.json();
@@ -70,9 +72,10 @@ export default connect((state) => state)(function CardPayment(props) {
       {paymentOptions}
       <br />
       <button
+        style={{ cursor: "pointer" }}
         onClick={(e) => {
-          e.preventDefault();
-          handlePay();
+          e.preventDefault()
+          handlePay(props.paymentDetails, selectedAmount)
         }}
       >
         Pay

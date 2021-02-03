@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import fetch from "isomorphic-fetch";
 import { summaryDonations } from "./helpers";
-import CardCustom, { Wrapper } from "./components/CardCustom";
+import { Column, Row, Wrapper } from './components/Card'
+import CardCustom from "./components/CardCustom";
+import { AlertBox } from "./components/AlertBox";
 
 export default connect((state) => state)(
   class App extends Component {
@@ -39,14 +41,6 @@ export default connect((state) => state)(
 
     render() {
       const self = this;
-
-      const style = {
-        color: "red",
-        margin: "1em 0",
-        fontWeight: "bold",
-        fontSize: "16px",
-        textAlign: "center",
-      };
       const donate = this.props.donate;
       const message = this.props.message;
 
@@ -58,10 +52,13 @@ export default connect((state) => state)(
             color: "#777",
           }}>Tamboon React</h1>
           <p>All donations: {donate}</p>
-          <p style={style}>{message}</p>
-          <Wrapper>
-            {self.state.charities.map((charitie, idx) => <CardCustom key={idx} charities={charitie} />)}
-          </Wrapper>
+          {message && <AlertBox>{message}</AlertBox>}
+
+          <Row>
+            {self.state.charities.map((charitie, idx) =>
+              <Column><CardCustom key={idx} charities={charitie} /></Column>
+            )}
+          </Row>
         </div>
       );
     }

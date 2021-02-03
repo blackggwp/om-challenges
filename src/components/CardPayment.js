@@ -32,11 +32,11 @@ export default connect((state) => state)(function CardPayment(props) {
     </label>
   ));
   const handlePay = ({ id, currency }, amount) => {
-    const postData = `{ "charitiesId": ${id}, "amount": ${amount}, "currency": "${currency}" }`
-    console.log(postData)
+    const paymentData = `{ "charitiesId": ${id}, "amount": ${amount}, "currency": "${currency}" }`
+    // console.log(paymentData)
     fetch("http://localhost:3001/payments", {
       method: 'POST',
-      body: postData,
+      body: paymentData,
       headers: { "Content-Type": "application/json" },
     })
       .then(function (resp) {

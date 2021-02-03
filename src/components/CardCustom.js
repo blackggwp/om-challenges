@@ -3,13 +3,6 @@ import styled from "styled-components";
 import CardPayment from "./CardPayment";
 import { Card } from "./Card";
 
-export const Wrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
-`;
-
 const CardPhoto = styled.img`
   width: 100%;
   height: 100%;

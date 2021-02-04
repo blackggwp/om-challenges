@@ -8,7 +8,10 @@
     "react"
   ],
   "rules": {
-    // "quotes": [2, "single"],
+    "quotes": [
+      2,
+      "single"
+    ],
     "prefer-const": 2,
     "no-const-assign": 2,
     "no-var": 2,

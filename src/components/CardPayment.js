@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Card } from './Card';
-import styled from "styled-components";
+import styled from 'styled-components';
+import { Button } from './Button';
 
 const CardPaymentStyled = styled(Card)`
   line-height: 4rem;
@@ -24,38 +25,38 @@ export default connect((state) => state)(function CardPayment(props) {
   const paymentOptions = [10, 20, 50, 100, 500].map((amount, j) => (
     <label key={j}>
       <input
-        type="radio"
-        name="payment"
+        type='radio'
+        name='payment'
         onChange={(e) => setSelectedAmount(amount)}
       />
       {amount}
     </label>
   ));
   const handlePay = ({ id, currency }, amount) => {
-    const paymentData = `{ "charitiesId": ${id}, "amount": ${amount}, "currency": "${currency}" }`
+    const paymentData = `{ 'charitiesId': ${id}, 'amount': ${amount}, 'currency': '${currency}' }`
     // console.log(paymentData)
-    fetch("http://localhost:3001/payments", {
+    fetch('http://localhost:3001/payments', {
       method: 'POST',
       body: paymentData,
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     })
       .then(function (resp) {
         return resp.json();
       })
       .then(function () {
         props.dispatch({
-          type: "UPDATE_TOTAL_DONATE",
+          type: 'UPDATE_TOTAL_DONATE',
           amount,
         });
         props.dispatch({
-          type: "UPDATE_MESSAGE",
+          type: 'UPDATE_MESSAGE',
           message: `Thanks for donate ${amount}!`,
         });
 
         setTimeout(function () {
           props.dispatch({
-            type: "UPDATE_MESSAGE",
-            message: "",
+            type: 'UPDATE_MESSAGE',
+            message: '',
           });
         }, 2000);
       });
@@ -71,15 +72,12 @@ export default connect((state) => state)(function CardPayment(props) {
       <p>Select the amount to donate (USD)</p>
       {paymentOptions}
       <br />
-      <button
-        style={{ cursor: "pointer" }}
+      <Button
         onClick={(e) => {
           e.preventDefault()
           handlePay(props.paymentDetails, selectedAmount)
         }}
-      >
-        Pay
-      </button>
+      >Pay</Button>
     </CardPaymentStyled>
   );
 });

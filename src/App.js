@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import fetch from "isomorphic-fetch";
-import { summaryDonations } from "./helpers";
-import { Column, Row, Wrapper } from './components/Card'
-import CardCustom from "./components/CardCustom";
-import { AlertBox } from "./components/AlertBox";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import fetch from 'isomorphic-fetch';
+import { summaryDonations } from './helpers';
+import { Column, Row } from './components/Card'
+import CardCustom from './components/CardCustom';
+import { AlertBox } from './components/AlertBox';
 
 export default connect((state) => state)(
   class App extends Component {
@@ -19,7 +19,7 @@ export default connect((state) => state)(
 
     componentDidMount() {
       const self = this;
-      fetch("http://localhost:3001/charities")
+      fetch('http://localhost:3001/charities')
         .then(function (resp) {
           return resp.json();
         })
@@ -27,13 +27,13 @@ export default connect((state) => state)(
           self.setState({ charities: data });
         });
 
-      fetch("http://localhost:3001/payments")
+      fetch('http://localhost:3001/payments')
         .then(function (resp) {
           return resp.json();
         })
         .then(function (data) {
           self.props.dispatch({
-            type: "UPDATE_TOTAL_DONATE",
+            type: 'UPDATE_TOTAL_DONATE',
             amount: summaryDonations(data.map((item) => item.amount)),
           });
         });
@@ -47,16 +47,18 @@ export default connect((state) => state)(
       return (
         <div>
           <h1 style={{
-            textAlign: "center",
-            fontFamily: "sans-serif",
-            color: "#777",
+            textAlign: 'center',
+            fontFamily: 'sans-serif',
+            color: '#777',
           }}>Tamboon React</h1>
           <p>All donations: {donate}</p>
           {message && <AlertBox>{message}</AlertBox>}
 
           <Row>
             {self.state.charities.map((charitie, idx) =>
-              <Column><CardCustom key={idx} charities={charitie} /></Column>
+              <Column key={idx}>
+                <CardCustom charities={charitie} />
+              </Column>,
             )}
           </Row>
         </div>
